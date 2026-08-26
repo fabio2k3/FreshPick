@@ -2,6 +2,8 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import { pool } from "./db";
+import ingredientesRouter from "./routes/ingredientes";
+import listaCompraRouter from "./routes/listaCompra";
 
 dotenv.config();
 
@@ -9,7 +11,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 4000;
 
 app.get("/health", async (_req, res) => {
   try {
@@ -21,6 +23,10 @@ app.get("/health", async (_req, res) => {
   }
 });
 
+app.use("/ingredientes", ingredientesRouter);
+app.use("/lista-compra", listaCompraRouter);
+
 app.listen(Number(PORT), "0.0.0.0", () => {
   console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
 });
+
