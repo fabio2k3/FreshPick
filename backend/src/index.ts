@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import { pool } from "./db";
 import ingredientesRouter from "./routes/ingredientes";
 import listaCompraRouter from "./routes/listaCompra";
+import recetasRouter from "./routes/recetas";
 
 dotenv.config();
 
@@ -25,6 +26,7 @@ app.get("/health", async (_req, res) => {
 
 app.use("/ingredientes", ingredientesRouter);
 app.use("/lista-compra", listaCompraRouter);
+app.use("/recetas", recetasRouter);
 
 app.listen(Number(PORT), "0.0.0.0", () => {
   console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
