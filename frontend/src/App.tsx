@@ -3,6 +3,7 @@ import { API_URL } from "./config";
 import type { Ingrediente } from "./types";
 import FormularioIngrediente from "./components/FormularioIngrediente";
 import ListaIngredientes from "./components/ListaIngredientes";
+import ListaCompra from "./components/ListaCompra";
 
 function App() {
   const [ingredientes, setIngredientes] = useState<Ingrediente[]>([]);
@@ -44,6 +45,9 @@ function App() {
         error={error}
         onCambio={cargarIngredientes}
       />
+
+      <h2>🛒 Lista de compra</h2>
+      <ListaCompra />
     </div>
   );
 }
