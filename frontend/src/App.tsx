@@ -42,6 +42,7 @@ function App() {
         ingredientes={ingredientes}
         cargando={cargando}
         error={error}
+        onCambio={cargarIngredientes}
       />
     </div>
   );
