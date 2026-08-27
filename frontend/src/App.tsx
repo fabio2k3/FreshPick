@@ -4,6 +4,7 @@ import type { Ingrediente } from "./types";
 import FormularioIngrediente from "./components/FormularioIngrediente";
 import ListaIngredientes from "./components/ListaIngredientes";
 import ListaCompra from "./components/ListaCompra";
+import Recetas from "./components/Recetas";
 
 function App() {
   const [ingredientes, setIngredientes] = useState<Ingrediente[]>([]);
@@ -45,6 +46,9 @@ function App() {
         error={error}
         onCambio={cargarIngredientes}
       />
+
+      <h2>🍳 ¿Qué puedo cocinar?</h2>
+      <Recetas />
 
       <h2>🛒 Lista de compra</h2>
       <ListaCompra />

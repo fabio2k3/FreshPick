@@ -12,3 +12,10 @@ export interface ItemCompra {
   comprado: boolean;
   creado_en: string;
 }
+
+export interface Receta {
+  nombre: string;
+  ingredientes_usados: string[];
+  pasos: string[];
+  tiempo_estimado: string;
+}
