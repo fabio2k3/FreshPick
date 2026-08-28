@@ -48,43 +48,37 @@ export default function FormularioIngrediente({ onIngredienteCreado }: Props) {
   }
 
   return (
-    <form onSubmit={handleSubmit} style={{ marginBottom: "2rem" }}>
-      <div>
-        <label>
-          Nombre:{" "}
-          <input
-            type="text"
-            value={nombre}
-            onChange={(e) => setNombre(e.target.value)}
-            placeholder="ej. Zanahoria"
-          />
-        </label>
+    <form onSubmit={handleSubmit} className="form-panel">
+      <div className="form-field">
+        <label>Nombre</label>
+        <input
+          type="text"
+          value={nombre}
+          onChange={(e) => setNombre(e.target.value)}
+          placeholder="ej. Zanahoria"
+        />
       </div>
-      <div>
-        <label>
-          Cantidad:{" "}
-          <input
-            type="text"
-            value={cantidad}
-            onChange={(e) => setCantidad(e.target.value)}
-            placeholder="ej. 2 unidades"
-          />
-        </label>
+      <div className="form-field">
+        <label>Cantidad</label>
+        <input
+          type="text"
+          value={cantidad}
+          onChange={(e) => setCantidad(e.target.value)}
+          placeholder="2 unidades"
+        />
       </div>
-      <div>
-        <label>
-          Fecha de caducidad:{" "}
-          <input
-            type="date"
-            value={fechaCaducidad}
-            onChange={(e) => setFechaCaducidad(e.target.value)}
-          />
-        </label>
+      <div className="form-field">
+        <label>Caduca</label>
+        <input
+          type="date"
+          value={fechaCaducidad}
+          onChange={(e) => setFechaCaducidad(e.target.value)}
+        />
       </div>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      <button type="submit" disabled={enviando}>
-        {enviando ? "Agregando..." : "Agregar ingrediente"}
+      <button type="submit" className="btn btn--primary" disabled={enviando}>
+        {enviando ? "Guardando..." : "Agregar"}
       </button>
+      {error && <p className="form-error">{error}</p>}
     </form>
   );
 }

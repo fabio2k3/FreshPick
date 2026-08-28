@@ -82,46 +82,39 @@ export default function ListaCompra() {
   }
 
   return (
-    <div>
-      <form onSubmit={agregarItem} style={{ marginBottom: "1rem" }}>
+    <div className="compra-panel">
+      <form onSubmit={agregarItem} className="compra-form">
         <input
           value={nuevoItem}
           onChange={(e) => setNuevoItem(e.target.value)}
           placeholder="ej. Pan"
         />
-        <button type="submit" disabled={enviando}>
-          {enviando ? "Agregando..." : "Agregar"}
+        <button type="submit" className="btn btn--primary" disabled={enviando}>
+          {enviando ? "..." : "Agregar"}
         </button>
       </form>
 
-      {cargando && <p>Cargando lista de compra...</p>}
-      {error && <p style={{ color: "red" }}>Error: {error}</p>}
-      {!cargando && items.length === 0 && <p>Tu lista de compra está vacía.</p>}
+      {cargando && <p className="estado-msg">Cargando lista de compra...</p>}
+      {error && <p className="estado-msg estado-error">Error: {error}</p>}
+      {!cargando && items.length === 0 && (
+        <p className="estado-msg">Tu lista de compra está vacía.</p>
+      )}
 
-      <ul style={{ listStyle: "none", padding: 0 }}>
-        {items.map((item) => (
-          <li
-            key={item.id}
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              padding: "0.4rem 0",
-              borderBottom: "1px solid #eee",
-            }}
-          >
-            <label style={{ textDecoration: item.comprado ? "line-through" : "none", color: item.comprado ? "#999" : "inherit" }}>
-              <input
-                type="checkbox"
-                checked={item.comprado}
-                onChange={() => toggleComprado(item)}
-              />{" "}
-              {item.nombre}
-            </label>
-            <button onClick={() => eliminarItem(item.id)}>Eliminar</button>
-          </li>
-        ))}
-      </ul>
+      {items.map((item) => (
+        <div key={item.id} className={`compra-item ${item.comprado ? "comprado" : ""}`}>
+          <label>
+            <input
+              type="checkbox"
+              checked={item.comprado}
+              onChange={() => toggleComprado(item)}
+            />
+            {item.nombre}
+          </label>
+          <button className="btn btn--ghost" onClick={() => eliminarItem(item.id)}>
+            Eliminar
+          </button>
+        </div>
+      ))}
     </div>
   );
 }

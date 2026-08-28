@@ -34,24 +34,47 @@ function App() {
 
   return (
     <div>
-      <h1>🥬 NeveraIA</h1>
+      <header className="hero">
+        <p className="hero__eyebrow">Cero desperdicio · Cocina con lo que hay</p>
+        <h1 className="hero__title">
+          Antes que se dañe,
+          <br />
+          <em>cocínalo.</em>
+        </h1>
+        <p className="hero__sub">
+          Registra lo que tienes en la nevera, prioriza lo que se vence primero
+          y deja que la IA te diga qué preparar hoy.
+        </p>
+      </header>
 
-      <h2>Agregar ingrediente</h2>
-      <FormularioIngrediente onIngredienteCreado={cargarIngredientes} />
+      <section className="section">
+        <div className="section__head">
+          <h2 className="section__title">Tu nevera</h2>
+          <span className="section__count">{ingredientes.length} items</span>
+        </div>
+        <FormularioIngrediente onIngredienteCreado={cargarIngredientes} />
+        <div style={{ height: "1rem" }} />
+        <ListaIngredientes
+          ingredientes={ingredientes}
+          cargando={cargando}
+          error={error}
+          onCambio={cargarIngredientes}
+        />
+      </section>
 
-      <h2>Tu nevera</h2>
-      <ListaIngredientes
-        ingredientes={ingredientes}
-        cargando={cargando}
-        error={error}
-        onCambio={cargarIngredientes}
-      />
+      <section className="section">
+        <div className="section__head">
+          <h2 className="section__title">¿Qué puedo cocinar?</h2>
+        </div>
+        <Recetas />
+      </section>
 
-      <h2>🍳 ¿Qué puedo cocinar?</h2>
-      <Recetas />
-
-      <h2>🛒 Lista de compra</h2>
-      <ListaCompra />
+      <section className="section">
+        <div className="section__head">
+          <h2 className="section__title">Lista de compra</h2>
+        </div>
+        <ListaCompra />
+      </section>
     </div>
   );
 }

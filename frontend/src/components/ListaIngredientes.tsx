@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { API_URL } from "../config";
 import type { Ingrediente } from "../types";
+import { diasRestantes, estadoFrescura, textoSticker } from "../utils/fecha";
 
 interface Props {
   ingredientes: Ingrediente[];
@@ -47,7 +48,6 @@ export default function ListaIngredientes({ ingredientes, cargando, error, onCam
 
   async function eliminar(id: number, nombre: string) {
     if (!confirm(`¿Eliminar "${nombre}" de tu nevera?`)) return;
-
     try {
       const res = await fetch(`${API_URL}/ingredientes/${id}`, { method: "DELETE" });
       if (!res.ok) throw new Error("Error al eliminar");
@@ -57,42 +57,67 @@ export default function ListaIngredientes({ ingredientes, cargando, error, onCam
     }
   }
 
-  if (cargando) return <p>Cargando ingredientes...</p>;
-  if (error) return <p style={{ color: "red" }}>Error: {error}</p>;
-  if (ingredientes.length === 0) return <p>No hay ingredientes en tu nevera todavía.</p>;
+  if (cargando) return <p className="estado-msg">Cargando ingredientes...</p>;
+  if (error) return <p className="estado-msg estado-error">Error: {error}</p>;
+  if (ingredientes.length === 0)
+    return <p className="estado-msg">Tu nevera está vacía. Agrega algo antes de que se dañe.</p>;
 
   return (
-    <ul style={{ listStyle: "none", padding: 0 }}>
-      {ingredientes.map((ing) => (
-        <li
-          key={ing.id}
-          style={{ marginBottom: "0.75rem", padding: "0.5rem", border: "1px solid #ddd", borderRadius: "4px" }}
-        >
-          {editandoId === ing.id ? (
-            <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap", alignItems: "center" }}>
-              <input value={nombreEdit} onChange={(e) => setNombreEdit(e.target.value)} placeholder="Nombre" />
-              <input value={cantidadEdit} onChange={(e) => setCantidadEdit(e.target.value)} placeholder="Cantidad" />
-              <input type="date" value={fechaEdit} onChange={(e) => setFechaEdit(e.target.value)} />
-              <button onClick={() => guardarEdicion(ing.id)}>Guardar</button>
-              <button onClick={cancelarEdicion}>Cancelar</button>
+    <div className="ingredientes-grid">
+      {ingredientes.map((ing) => {
+        const dias = diasRestantes(ing.fecha_caducidad);
+        const estado = estadoFrescura(dias);
+
+        if (editandoId === ing.id) {
+          return (
+            <div key={ing.id} className="ingrediente-card ingrediente-card--editando">
+              <div className="form-field">
+                <label>Nombre</label>
+                <input value={nombreEdit} onChange={(e) => setNombreEdit(e.target.value)} />
+              </div>
+              <div className="form-field">
+                <label>Cantidad</label>
+                <input value={cantidadEdit} onChange={(e) => setCantidadEdit(e.target.value)} />
+              </div>
+              <div className="form-field">
+                <label>Caduca</label>
+                <input type="date" value={fechaEdit} onChange={(e) => setFechaEdit(e.target.value)} />
+              </div>
+              <div className="ingrediente-card__acciones">
+                <button className="btn btn--primary" onClick={() => guardarEdicion(ing.id)}>
+                  Guardar
+                </button>
+                <button className="btn btn--ghost" onClick={cancelarEdicion}>
+                  Cancelar
+                </button>
+              </div>
             </div>
-          ) : (
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              <span>
-                <strong>{ing.nombre}</strong>
-                {ing.cantidad && ` — ${ing.cantidad}`}
-                {ing.fecha_caducidad && (
-                  <span> (caduca: {new Date(ing.fecha_caducidad).toLocaleDateString()})</span>
-                )}
-              </span>
-              <span>
-                <button onClick={() => iniciarEdicion(ing)}>Editar</button>{" "}
-                <button onClick={() => eliminar(ing.id, ing.nombre)}>Eliminar</button>
-              </span>
+          );
+        }
+
+        return (
+          <div key={ing.id} className="ingrediente-card">
+            <span className="ingrediente-card__sticker" data-estado={estado}>
+              {textoSticker(dias)}
+            </span>
+            <p className="ingrediente-card__nombre">{ing.nombre}</p>
+            <p className="ingrediente-card__meta">
+              {ing.cantidad || "—"}
+              {ing.fecha_caducidad && (
+                <> · {new Date(ing.fecha_caducidad).toLocaleDateString()}</>
+              )}
+            </p>
+            <div className="ingrediente-card__acciones">
+              <button className="btn" onClick={() => iniciarEdicion(ing)}>
+                Editar
+              </button>
+              <button className="btn btn--ghost" onClick={() => eliminar(ing.id, ing.nombre)}>
+                Eliminar
+              </button>
             </div>
-          )}
-        </li>
-      ))}
-    </ul>
+          </div>
+        );
+      })}
+    </div>
   );
 }
